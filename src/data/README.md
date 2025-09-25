@@ -6,4 +6,4 @@ This file is the access point to the bls api as well as some preprocessing that 
 ### CU Files
 The cu-item.tsv and cu-area.tsv come from the BLS website at TBA. The describe all item and area codes for the basic indexes. 
 ### item.txt
-A text file containing item codes for the bls-api to pull. These codes are separated by \\n.
+A text file containing item codes for the bls-api to pull. These codes are separated by \\n. This list is based off the (item aggregations)[https://www.bls.gov/cpi/additional-resources/cpi-item-aggregation.htm] that are commonly used by BLS.
