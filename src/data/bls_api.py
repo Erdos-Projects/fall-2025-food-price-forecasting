@@ -14,6 +14,7 @@ import pdb
 import requests
 import json
 import prettytable
+from utils import dict_to_csv
 def get_data(startyear, endyear, filename="data"):
     seriesid = get_series('CUUR0000')
     headers = {'Content-type': 'application/json'}
@@ -22,6 +23,7 @@ def get_data(startyear, endyear, filename="data"):
                        "endyear": endyear})
     p = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
     json_data = json.loads(p.text)
+    out = dict_to_csv(json_data)
     output = open(filename + ".json", 'w')
     output.write(p.text)
     output.close()
