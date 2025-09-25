@@ -14,7 +14,8 @@ import pdb
 import requests
 import json
 import prettytable
-def get_data(seriesid, startyear, endyear, filename="data"):
+def get_data(startyear, endyear, filename="data"):
+    seriesid = get_series('CUUR0000')
     headers = {'Content-type': 'application/json'}
     data = json.dumps({"seriesid": seriesid,
                        "startyear": startyear,
@@ -41,6 +42,14 @@ def get_data(seriesid, startyear, endyear, filename="data"):
 #        output.write(x.get_string())
 #        output.close()
 
+def get_series(prefix):
+    with open('item.txt', 'r') as file:
+        items = file.read().splitlines()
+    out = []
+    for item in items:
+        out.append(prefix + item)
+    return out
+
 
 if __name__ == "__main__":
     # series id for fresh fruits and veggies
@@ -48,6 +57,6 @@ if __name__ == "__main__":
     # series id
     #seriesid = ['CUUR0000SA0','SUUR0000SA0']
     seriesid = ['CUUR0000SEFK', 'CUUR0110SEFH',  'CUUR0000SA0']
-    get_data(seriesid, "2011", "2013")
+    get_data("2011", "2013")
 
 
