@@ -24,9 +24,9 @@ def get_data(startyear, endyear, filename="data"):
     p = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
     json_data = json.loads(p.text)
     out = dict_to_csv(json_data)
-    output = open(filename + ".json", 'w')
-    output.write(p.text)
-    output.close()
+    #output = open(filename + ".json", 'w')
+    #output.write(p.text)
+    #output.close()
 #    for series in json_data['Results']['series']:
 #        x = prettytable.PrettyTable(["series id", "year", "period", "value", "footnotes"])
 #        seriesId = series['seriesID']

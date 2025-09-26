@@ -11,7 +11,7 @@ def dict_to_csv(data, csv_name="output.csv"):
     This function converts the json file provided by the BLS API and converts
     it to a csv.
     """
-    data = data["Results"]["series"] # this is a list
+    data = data["Results"]["series"]  # this is a list
     out = []
     for series in data:
         id = series['seriesID']

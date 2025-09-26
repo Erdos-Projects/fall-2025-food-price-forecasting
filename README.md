@@ -22,6 +22,8 @@ These indexes are used by the government to assess inflation, measure economic h
 Our goal is to forecast the basic indexes relevant to food.
 ## Dataset Generation
 Data is gathered through the BLS website and their api. All data is public. Since most indexes are updated monthly, we will use an automated pipeline that periodically pulls and preprocessing data from the BLS.
+
+CSV files are ignored by github in this repo. In order to download the data navigate to src/data and run the bls_api.py file.
 ## Exploratory-Data-Analysis
 ## Modeling-Approach
 ## Results
