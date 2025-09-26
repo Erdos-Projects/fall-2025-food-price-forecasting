@@ -12,7 +12,7 @@ Team Member: [Duncan Bennett](https://github.com/tai-bennett), [Ray Hagimoto](),
 7. [Description of Repository](#Description-of-Repository)
 
 ## Introduction
-The Consumper Price Index (CPI) is a monthly index that measures the average change in prices of a market basket
+The Consumer Price Index (CPI) is a monthly index that measures the average change in prices of a market basket
 of goods and services bought by urban consumers. It is a weighted average that is currently
 constructed from over 7700 basic indexes, which correspond to 32 geographic areas
 segmented into 75 primary sampling units (PSUs). 
@@ -27,5 +27,7 @@ CSV files are ignored by github in this repo. In order to download the data navi
 ## Exploratory-Data-Analysis
 ## Modeling-Approach
 ## Results
+### KPI's
+We will measure the performance of our models using MAE, RMSE and MAPE.
 ## Future Work
 ## Description of Repository

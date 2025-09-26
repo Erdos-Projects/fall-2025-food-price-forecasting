@@ -23,10 +23,11 @@ def get_data(startyear, endyear, filename="data"):
                        "endyear": endyear})
     p = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
     json_data = json.loads(p.text)
-    out = dict_to_csv(json_data)
-    #output = open(filename + ".json", 'w')
-    #output.write(p.text)
-    #output.close()
+    save_name = filename + startyear + "-" + endyear
+    dict_to_csv(json_data, csv_name= save_name + ".csv")
+    output = open(save_name +  ".json", 'w')
+    output.write(p.text)
+    output.close()
 #    for series in json_data['Results']['series']:
 #        x = prettytable.PrettyTable(["series id", "year", "period", "value", "footnotes"])
 #        seriesId = series['seriesID']
@@ -54,11 +55,8 @@ def get_series(prefix):
 
 
 if __name__ == "__main__":
-    # series id for fresh fruits and veggies
-    #seriesid = ["SEFK01", "SEFK02", "SEFK03", "SEFK04", "SEFL01", "SEFL02", "SEFL03", "SEFL04"]
-    # series id
-    #seriesid = ['CUUR0000SA0','SUUR0000SA0']
-    seriesid = ['CUUR0000SEFK', 'CUUR0110SEFH',  'CUUR0000SA0']
-    get_data("2011", "2013")
+    get_data("2016", "2025")
+    get_data("2006", "2015")
+    get_data("1996", "2005")
 
 
