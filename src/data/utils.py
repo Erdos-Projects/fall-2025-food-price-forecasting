@@ -23,7 +23,8 @@ def dict_to_csv(data, csv_name="output.csv"):
             row.append(item['value'])
             out.append(row)
     df = pd.DataFrame(out, columns=['item', 'date', 'value'])
-    df.to_csv(csv_name, index=False)
+    df = df.pivot(index='date', columns='item', values='value')
+    df.to_csv(csv_name, index=True)
             
             
 

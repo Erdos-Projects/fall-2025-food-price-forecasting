@@ -15,8 +15,8 @@ import requests
 import json
 import prettytable
 from utils import dict_to_csv
-def get_data(startyear, endyear, filename="data"):
-    seriesid = get_series('CUUR0000')
+def get_data(startyear, endyear, filename="data", keyname='item.txt'):
+    seriesid = get_series('CUUR0000', keyname=keyname)
     headers = {'Content-type': 'application/json'}
     data = json.dumps({"seriesid": seriesid,
                        "startyear": startyear,
@@ -45,8 +45,8 @@ def get_data(startyear, endyear, filename="data"):
 #        output.write(x.get_string())
 #        output.close()
 
-def get_series(prefix):
-    with open('item.txt', 'r') as file:
+def get_series(prefix, keyname='item.txt'):
+    with open(keyname, 'r') as file:
         items = file.read().splitlines()
     out = []
     for item in items:
@@ -55,8 +55,10 @@ def get_series(prefix):
 
 
 if __name__ == "__main__":
-    get_data("2016", "2025")
-    get_data("2006", "2015")
-    get_data("1996", "2005")
+    get_data("2016", "2025", keyname='item_foods.txt')
+    get_data("2006", "2015", keyname='item_foods.txt')
+    get_data("1996", "2005", keyname='item_foods.txt')
+    get_data("1986", "1995", keyname='item_foods.txt')
+    get_data("1976", "1985", keyname='item_foods.txt')
 
 
