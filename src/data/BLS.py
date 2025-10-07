@@ -4,6 +4,7 @@ import requests
 import json
 from datetime import datetime
 from utils import dict_to_csv
+import warnings
 
 class BLS():
     def __init__(self):
@@ -39,9 +40,16 @@ class BLS():
                           headers=headers)
         json_data = json.loads(p.text)
         df = self._convert_to_df(json_data)
+        # test if json has warning messages
+        if len(json_data['message']) > 0:
+            warning_message = "BLS request returned a user warning: " + str(json_data['message'])
+            warnings.warn(warning_message, category=UserWarning)
         return df
 
     def _convert_to_df(self, data):
+        if data['status'] == 'REQUEST_NOT_PROCESSED':
+            message = "Number of daily api calls has reached the limit: " + str(data['message'])
+            raise RuntimeError(message)
         data = data["Results"]["series"]  # this is a list
         out = []
         for series in data:
@@ -68,11 +76,11 @@ class BLS():
             out = []
             start_year = start_date.year
             end_year = end_date.year
-            temp_year = start_year + 10
+            temp_year = start_year + 9
             while True:
                 out.append([str(start_year), str(temp_year)])
                 start_year = temp_year + 1
-                temp_year = temp_year + 10
+                temp_year = temp_year + 9
                 if temp_year >= end_year:
                     out.append([str(start_year), str(end_year)])
                     break
@@ -103,6 +111,9 @@ if __name__ == "__main__":
     end = datetime(2015, 4, 1)
     date_range = [start, end]
     df = api.get_data(columns, date_range, seasonal_adjust=True)
-    pdb.set_trace()
+    print(df)
+
+    print("Now testing the saving feature")
+    df = api.get_data(columns, date_range, seasonal_adjust=True, save_path="./example_data.csv")
     
 
