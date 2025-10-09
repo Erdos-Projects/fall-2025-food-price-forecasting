@@ -12,8 +12,8 @@ def BLS_test():
     aggregates = "SFA11, SA0"
     columns = columns + ", " + aggregates
     columns = columns.split(", ")
-    start = datetime(2001, 1, 1)
-    end = datetime(2015, 4, 1)
+    start = datetime(1979, 1, 1)
+    end = datetime(2025, 7, 1)
     date_range = [start, end]
     df = api.get_data(columns, date_range, seasonal_adjust=True, mode='income', registration_key=True)
     print(df)
