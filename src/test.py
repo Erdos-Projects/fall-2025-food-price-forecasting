@@ -19,7 +19,8 @@ def BLS_test():
     print(df)
 
     print("Now testing the saving feature")
-    df = api.get_data(columns, date_range, seasonal_adjust=True, save_path="./example_data.csv", registration_key=True)
+    df = api.get_data(columns, date_range, seasonal_adjust=True, save_path="./data/raw/CPI.csv", registration_key=True)
+    df = api.get_data(columns, date_range, seasonal_adjust=True, save_path="./data/raw/income.csv", mode='income', registration_key=True)
 
 
 if __name__ == "__main__":
