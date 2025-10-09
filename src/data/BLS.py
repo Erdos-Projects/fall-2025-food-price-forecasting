@@ -1,19 +1,21 @@
-import pdb
+import pdb, os
 import pandas as pd
 import requests
 import json
 from datetime import datetime
-from utils import dict_to_csv
+from .utils import dict_to_csv
 import warnings
 
 class BLS():
     def __init__(self):
         pass
 
-    def get_data(self, id_list, date_range, seasonal_adjust=False, save_path=None):
+    def get_data(self, id_list, date_range, seasonal_adjust=False, save_path=None, mode='cpi', registration_key=False):
         self.id_list = id_list
         self.date_range = date_range
         self.seasonal_adjust = seasonal_adjust
+        self.mode = mode
+        self.registration_key = registration_key
 
         date_list = self._get_date_list()
         columns = self._get_columns()
@@ -32,9 +34,16 @@ class BLS():
 
     def fetch(self, columns, date_range):
         headers = {'Content-type': 'application/json'}
-        data = json.dumps({"seriesid": columns,
-                           "startyear": date_range[0],
-                           "endyear": date_range[1]})
+        if self.mode == 'income':
+            columns = ['LEU0252881500']  # this is the series id for weekly income unadjusted
+        json_payload = {"seriesid": columns,
+                        "startyear": date_range[0],
+                        "endyear": date_range[1]}
+        if self.registration_key:
+            key = os.getenv("BLS_KEY")
+            json_payload['registrationkey'] = key
+
+        data = json.dumps(json_payload)
         p = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/',
                           data=data,
                           headers=headers)
@@ -56,7 +65,11 @@ class BLS():
             id = series['seriesID']
             for item in series['data']:
                 row = []
-                s = item['year'] + " " + item['periodName']
+                if self.mode == 'income':
+                    s = item['year'] + " " + self._quarter_to_month(item['periodName'])
+                else:
+                    s = item['year'] + " " + item['periodName']
+                    
                 dt = datetime.strptime(s, "%Y %B")
                 row.append(id)
                 row.append(dt)
@@ -88,6 +101,20 @@ class BLS():
         else:
             return [[str(start_date.year), str(end_date.year)]]
 
+    def _quarter_to_month(self, s):
+        quarter = int(s[0])
+        if quarter == 1:
+            return 'January'
+        elif quarter == 2:
+            return 'April'
+        elif quarter == 3:
+            return 'July'
+        elif quarter == 4:
+            return 'October'
+        else:
+            return None
+
+
     def _get_columns(self):
         if self.seasonal_adjust:
             prefix = "CUSR0000"
@@ -97,7 +124,6 @@ class BLS():
         for name in self.id_list:
             out.append(prefix+name)
         return out
-
 
 if __name__ == "__main__":
     print("Testing the BLS api object")
@@ -110,8 +136,8 @@ if __name__ == "__main__":
     start = datetime(2001, 1, 1)
     end = datetime(2015, 4, 1)
     date_range = [start, end]
-    df = api.get_data(columns, date_range, seasonal_adjust=True)
-    print(df)
+    #df = api.get_data(columns, date_range, seasonal_adjust=True)
+    #print(df)
 
     print("Now testing the saving feature")
     df = api.get_data(columns, date_range, seasonal_adjust=True, save_path="./example_data.csv")
